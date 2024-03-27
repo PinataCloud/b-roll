@@ -30,7 +30,7 @@ const formSchema = z.object({
 export function UploadForm() {
   const [selectedFile, setSelecteFile]: any = useState();
   const [loading, setLoading] = useState(false);
-  const [frameLink, setFrameLink] = useState("dflkasdjfa");
+  const [frameLink, setFrameLink] = useState("");
 
   async function fileChangeHandler(event: any) {
     const file = event.target.files[0];
