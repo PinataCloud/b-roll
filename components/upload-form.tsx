@@ -67,7 +67,7 @@ export function UploadForm() {
     console.log(data)
     const jsonCID = await uploadJSON(data);
 
-    setFrameLink(`http://localhost:3000/frame/${jsonCID}`);
+    setFrameLink(`${process.env.NEXT_PUBLIC_BASE_URL}/frame/${jsonCID}`);
     setLoading(false);
   }
 
