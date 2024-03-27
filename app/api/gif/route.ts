@@ -7,7 +7,7 @@ export async function POST(req: NextRequest, res: NextResponse){
     start_time: "0",
     duration: "2",
     speed: "0",
-    size: "400x300"
+    size: "400x400"
   })
   try {
    const gifRequest = await fetch(`https://api.apyhub.com/generate/gif/url?output=test-sample.gif`, {
