@@ -28,9 +28,9 @@ const formSchema = z.object({
 });
 
 export function UploadForm() {
-  const [selectedFile, setSelecteFile] = useState();
+  const [selectedFile, setSelecteFile]: any = useState();
   const [loading, setLoading] = useState(false);
-  const [frameLink, setFrameLink] = useState("");
+  const [frameLink, setFrameLink] = useState("dflkasdjfa");
 
   async function fileChangeHandler(event: any) {
     const file = event.target.files[0];
@@ -74,12 +74,16 @@ export function UploadForm() {
     setFrameLink(`${process.env.NEXT_PUBLIC_BASE_URL}/frame/${jsonCID}`);
     setLoading(false);
   }
+  async function reset() {
+    setFrameLink("");
+    setSelecteFile("");
+  }
 
   function ButtonLoading() {
     return (
       <Button className="w-full" disabled>
         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        Please wait
+        Uploading your banger, making a frame
       </Button>
     );
   }
@@ -87,31 +91,34 @@ export function UploadForm() {
   return (
     <div className="border p-8 rounded-lg">
       {frameLink ? (
-        <Link
-          href={`https://warpcast.com/~/compose?text=B-Roll&embeds[]=${frameLink}`}
-          target="_blank"
-        >
-          <Button className="w-full bg-purple-600 text-white gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
-              width="44"
-              height="44"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="white"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M3 21l18 0" />
-              <path d="M4 21v-15a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v15" />
-              <path d="M9 21v-8a3 3 0 0 1 6 0v8" />
-            </svg>
-            Share on Warpcast
-          </Button>
-        </Link>
+        <div className="flex flex-col gap-4">
+          <Link
+            href={`https://warpcast.com/~/compose?text=B-Roll&embeds[]=${frameLink}`}
+            target="_blank"
+          >
+            <Button className="w-full bg-purple-600 text-white gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-6 h-6"
+                width="44"
+                height="44"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="white"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M3 21l18 0" />
+                <path d="M4 21v-15a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v15" />
+                <path d="M9 21v-8a3 3 0 0 1 6 0v8" />
+              </svg>
+              Share on Warpcast
+            </Button>
+          </Link>
+          <Button className="w-full" onClick={reset}>Make Another</Button>
+        </div>
       ) : (
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -127,7 +134,7 @@ export function UploadForm() {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="My cool video" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
