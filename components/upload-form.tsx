@@ -19,6 +19,7 @@ import { uploadFile } from "@/utils/upload-fils";
 import { uploadJSON } from "@/utils/uload-json";
 import { Loader2 } from "lucide-react";
 import { uploadURL } from "@/utils/upload-url";
+import Link from "next/link";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -60,15 +61,14 @@ export function UploadForm() {
     const gifRes = await gifReq.json();
     console.log(gifRes);
 
-
-    const gifCID = await uploadURL(gifRes)
+    const gifCID = await uploadURL(gifRes);
 
     const data = {
       image: gifCID,
       video: fileCID,
     };
 
-    console.log(data)
+    console.log(data);
     const jsonCID = await uploadJSON(data);
 
     setFrameLink(`${process.env.NEXT_PUBLIC_BASE_URL}/frame/${jsonCID}`);
@@ -85,27 +85,64 @@ export function UploadForm() {
   }
 
   return (
-    <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <Input placeholder="file" type="file" onChange={fileChangeHandler} />
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="shadcn" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+    <div className="border p-8 rounded-lg">
+      {frameLink ? (
+        <Link
+          href={`https://warpcast.com/~/compose?text=B-Roll&embeds[]=${frameLink}`}
+          target="_blank"
+        >
+          <Button className="w-full bg-purple-600 text-white gap-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
+              width="44"
+              height="44"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="white"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <path d="M3 21l18 0" />
+              <path d="M4 21v-15a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v15" />
+              <path d="M9 21v-8a3 3 0 0 1 6 0v8" />
+            </svg>
+            Share on Warpcast
+          </Button>
+        </Link>
+      ) : (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <Input
+              placeholder="file"
+              type="file"
+              onChange={fileChangeHandler}
+            />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="shadcn" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {loading ? (
+              ButtonLoading()
+            ) : (
+              <Button className="w-full" type="submit">
+                Submit
+              </Button>
             )}
-          />
-          {loading ? ButtonLoading() : <Button type="submit">Submit</Button>}
-        </form>
-      </Form>
-      {frameLink && <p>{frameLink}</p>}
+          </form>
+        </Form>
+      )}
     </div>
   );
 }
