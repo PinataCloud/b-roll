@@ -18,6 +18,7 @@ import { useState } from "react";
 import { uploadFile } from "@/utils/upload-fils";
 import { uploadJSON } from "@/utils/uload-json";
 import { Loader2 } from "lucide-react";
+import { uploadURL } from "@/utils/upload-url";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -59,8 +60,11 @@ export function UploadForm() {
     const gifRes = await gifReq.json();
     console.log(gifRes);
 
+
+    const gifCID = await uploadURL(gifRes)
+
     const data = {
-      image: gifRes,
+      image: gifCID,
       video: fileCID,
     };
 

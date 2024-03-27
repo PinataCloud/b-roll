@@ -6,26 +6,29 @@ const fdk = new PinataFDK({
 });
 
 type Params = {
-  uri: string
-}
+  uri: string;
+};
 
 export async function GET(request: Request, context: { params: Params }) {
-  const cid = context.params.uri
-  const jsonReq = await fetch(`https://dweb.mypinata.cloud/ipfs/${cid}`)
-  const data = await jsonReq.json()
-  console.log(data)
+  const cid = context.params.uri;
+  const jsonReq = await fetch(`https://dweb.mypinata.cloud/ipfs/${cid}`);
+  const data = await jsonReq.json();
+  console.log(data);
   try {
     const frameMetadata = fdk.getFrameMetadata({
-      aspect_ratio: '1:1',
-      image: { url: data.image} ,
+      aspect_ratio: "1:1",
+      cid: data.image,
       buttons: [
-        { label: 'Watch Video', action: 'link', target: `https://dweb.mypinata.cloud/ipfs/${data.video}` }
-      ]
-    })
-    return new NextResponse(frameMetadata)
+        {
+          label: "Watch Video",
+          action: "link",
+          target: `https://dweb.mypinata.cloud/ipfs/${data.video}`,
+        },
+      ],
+    });
+    return new NextResponse(frameMetadata);
   } catch (error) {
     console.log(error);
     return NextResponse.json({ error });
   }
 }
-
