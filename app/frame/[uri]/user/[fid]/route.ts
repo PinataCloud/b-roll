@@ -25,7 +25,7 @@ export async function GET(request: Request, context: { params: Params }) {
       buttons: [
         {
           label: "Watch Video",
-          action: "link",
+          action: "post_redirect",
           target: `${process.env.NEXT_PUBLIC_BASE_URL}/user/${fid}/video/${data.video}`,
         },
       ],
