@@ -7,13 +7,17 @@ const fdk = new PinataFDK({
 
 type Params = {
   uri: string;
+  fid: number;
 };
 
 export async function GET(request: Request, context: { params: Params }) {
   const cid = context.params.uri;
+  const fid = context.params.fid;
+  console.log('request', request);
+  console.log('context', context);
+
   const jsonReq = await fetch(`https://dweb.mypinata.cloud/ipfs/${cid}`);
   const data = await jsonReq.json();
-  console.log(data);
   try {
     const frameMetadata = fdk.getFrameMetadata({
       aspect_ratio: "1:1",
@@ -22,7 +26,7 @@ export async function GET(request: Request, context: { params: Params }) {
         {
           label: "Watch Video",
           action: "link",
-          target: `https://dweb.mypinata.cloud/ipfs/${data.video}`,
+          target: `${process.env.NEXT_PUBLIC_BASE_URL}/user/${fid}/video/${data.video}`,
         },
       ],
     });

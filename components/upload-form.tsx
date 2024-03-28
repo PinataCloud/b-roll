@@ -20,6 +20,7 @@ import { uploadJSON } from "@/utils/uload-json";
 import { Loader2 } from "lucide-react";
 import { uploadURL } from "@/utils/upload-url";
 import Link from "next/link";
+import {useProfile} from "@farcaster/auth-kit";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -31,6 +32,10 @@ export function UploadForm() {
   const [selectedFile, setSelecteFile]: any = useState();
   const [loading, setLoading] = useState(false);
   const [frameLink, setFrameLink] = useState("");
+  const {
+    isAuthenticated,
+    profile: { fid },
+  } = useProfile();
 
   async function fileChangeHandler(event: any) {
     const file = event.target.files[0];
@@ -71,7 +76,7 @@ export function UploadForm() {
     console.log(data);
     const jsonCID = await uploadJSON(data);
 
-    setFrameLink(`${process.env.NEXT_PUBLIC_BASE_URL}/frame/${jsonCID}`);
+    setFrameLink(`${process.env.NEXT_PUBLIC_BASE_URL}/frame/${jsonCID}/user/${fid}`);
     setLoading(false);
   }
   async function reset() {
@@ -93,7 +98,7 @@ export function UploadForm() {
       {frameLink ? (
         <div className="flex flex-col gap-4">
           <Link
-            href={`https://warpcast.com/~/compose?text=B-Roll&embeds[]=${frameLink}`}
+            href={`https://warpcast.com/~/compose?text=!b-roll&embeds[]=${frameLink}`}
             target="_blank"
           >
             <Button className="w-full bg-purple-600 text-white gap-2">
