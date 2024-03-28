@@ -4,6 +4,7 @@ import Image from "next/image"
 import { usePathname } from 'next/navigation'
 
 import React from 'react'
+import {Avatar, Box, Card, CardContent, Typography} from "@mui/material";
 
 
 export default async function Video() {
@@ -22,25 +23,25 @@ export default async function Video() {
 
     console.log(fcUser)
 
-    return <div style={{
+    return <Box sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        padding: '40px'
     }}>
-        <div style={{width: 1200, height: 600, display: "flex", justifyContent: "center"}}>
+        <Box style={{width: 1200, height: 600}}>
         <video style={{height: "100%"}} autoPlay controls>
             <source src={pinataVideo} type="video/mp4"/>
         </video>
-        </div>
+        </Box>
+        <Box>
+            <Card>
+                <CardContent>
+                    <Typography>{fcUser.data.display_name}</Typography>
+                    <Typography>{fcUser.data.bio}</Typography>
+                    <Avatar alt="Remy Sharp" src={fcUser.data.pfp_url} />
+                </CardContent>
+            </Card>
+        </Box>
 
-                    {/*name={fcUser.data.display_name}*/}
-                    {/*description={fcUser.data.bio}*/}
-                    {/*avatarProps={{*/}
-                    {/*    src: fcUser.data.pfp_url,*/}
-                    {/*    radius: 'lg'*/}
-                    {/*}}*/}
-
-
-    </div>
+    </Box>
 }
