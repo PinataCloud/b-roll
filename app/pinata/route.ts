@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PinataFDK } from "pinata-fdk";
+
 const fdk = new PinataFDK({
   pinata_jwt: `${process.env.PINATA_JWT}`,
   pinata_gateway: `${process.env.GATEWAY_URL}`,
@@ -7,12 +8,12 @@ const fdk = new PinataFDK({
 
 type Params = {
   uri: string;
-  fid: number;
+  castId: number;
 };
 
 export async function GET(request: Request, context: { params: Params }) {
   const cid = context.params.uri;
-  const fid = context.params.fid;
+  const castId = context.params.castId;
   console.log('request', request);
   console.log('context', context);
 
@@ -26,7 +27,7 @@ export async function GET(request: Request, context: { params: Params }) {
         {
           label: "Watch Video",
           action: "post_redirect",
-          target: `${process.env.NEXT_PUBLIC_BASE_URL}/user/${fid}/video/${data.video}`,
+          target: `${process.env.NEXT_PUBLIC_BASE_URL}/cast/${castId}/video/${data.video}`,
         },
       ],
     });
