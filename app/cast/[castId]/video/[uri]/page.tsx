@@ -1,8 +1,13 @@
-import Image from "next/image"
-import { headers } from 'next/headers'
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
+
 
 import React from 'react'
-import {Avatar, Box, Card, CardContent, Paper, Typography} from "@mui/material";
+import {Avatar, Box, Button, Card, CardContent, Paper, Typography} from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 export default async function Video(params: any) {
 
@@ -57,28 +62,46 @@ export default async function Video(params: any) {
             </video>
             </Box>
             <Box>
+                <Box sx={{display: "flex", alignItems: "center", width: "100%", justifyContent: "flex-end", mb:2}}>
+                    <FavoriteIcon sx={{cursor: "pointer"}}/>
+                    <Typography>{hashRes.data.reactions?.likes?.length}</Typography>
+                </Box>
                 <Card>
-                    <CardContent>
-                        <Typography>{fcUser.data.display_name}</Typography>
+                    <CardContent sx={{display: "flex", flexDirection: "column"}}>
+                        <Typography sx={{fontWeight: 900}}>{fcUser.data.display_name}</Typography>
                         <Typography>{fcUser.data.bio}</Typography>
                         <Avatar alt="Remy Sharp" src={fcUser.data.pfp_url} />
+                        <Box sx={{marginLeft: "auto"}}>
+                            <Button variant={"contained"}>Follow</Button>
+                        </Box>
                     </CardContent>
                 </Card>
-                Likes: {hashRes.data.reactions?.likes?.length}
             </Box>
             <Box sx={{width: "100%"}}>
-                <Paper sx={{width: "100%"}}>
-                    <Typography variant={"h5"} sx={{mt: 2, mb: 2}}>{replies.data.casts.length} comments</Typography>
-                    {replies.data.casts.map((cast: any) => {
-                        return <Card>
-                            <CardContent sx={{backgroundColor: "black"}}>
-                                <Typography>{cast.author.display_name}</Typography>
-                                <Avatar alt="Remy Sharp" src={cast.author.pfp_url} />
-                                <Typography>{cast.content}</Typography>
+                        <Typography variant={"h6"} sx={{mt: 2, mb: 2}}>{replies.data.casts.length} comments</Typography>
+                        {replies.data.casts.map((cast: any) => {
+                        const someDate = dayjs(cast.timestamp); // Replace with your actual date
+                        const prettyDate = someDate.fromNow();
+                        return <Card sx={{mt: 2}}>
+                            <CardContent>
+                                <Box sx={{display: "flex", alignItems: "center", gap: 2}}>
+                                    <Avatar alt="Remy Sharp" src={cast.author.pfp_url} />
+                                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                                        <Box sx={{display: "flex", alignItems: "flex-end", gap: 1}}>
+                                            <Typography sx={{fontWeight: 900}}>{cast.author.display_name}</Typography>
+                                            <Typography variant={"caption"}>@{cast.author.username}</Typography>
+                                            <Typography variant={"caption"}>{prettyDate}</Typography>
+                                        </Box>
+                                        <Typography>{cast.content}</Typography>
+                                    </Box>
+                                </Box>
+                                <Box sx={{display: "flex", mt: 2, gap: 1, alignItems: "flex-end"}}>
+                                    <FavoriteBorderIcon sx={{cursor: "pointer"}}/>
+                                    <Typography sx={{fontWeight: 900}} variant={"caption"}>Reply</Typography>
+                                </Box>
                             </CardContent>
                         </Card>
                     })}
-                </Paper>
             </Box>
         </Box>
         <Box sx={{border: "1px solid red", width: "25%"}}>
