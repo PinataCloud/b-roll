@@ -31,7 +31,7 @@ export default function RootLayout({
       >
       <ThemeProvider theme={theme}>
         <CssBaseline />
-          <Container>
+          <Container maxWidth={"xl"}>
             {children}
           </Container>
       </ThemeProvider>
